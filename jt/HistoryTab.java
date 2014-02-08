@@ -25,6 +25,7 @@ public class HistoryTab extends ListTab
 						break;
 					case 'k':
 						list.changeSelection(list.getSelectedRow() - 1, 0, false, false);
+						break;
 				}
 				switch (e.getKeyCode())
 				{
