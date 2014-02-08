@@ -44,12 +44,16 @@ public class ActivityRender extends JPanel implements TableCellRenderer
 	{
 		ActivityEvent e = (ActivityEvent) value;
 
-		if (isSelected)
-		{
-			setColor(Color.green);
-		} else
+		if ((table.getRowCount() - row) % 2 == 0)
 		{
 			setColor(Color.white);
+		} else
+		{
+			setColor(new Color(192, 255, 255));
+		}
+		if (isSelected)
+		{
+			setColor(new Color(0,128,255));
 		}
 
 		for (Component c : this.getComponents())

@@ -43,20 +43,20 @@ public class StatusRenderer extends JPanel implements TableCellRenderer
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		StatusModel s = TweetDatabase.getStatus((Long) value);
-
-		if (isSelected)
+		if ((table.getRowCount() - row) % 2 == 0)
 		{
-			setColor(Color.green);
+			setColor(Color.white);
 		} else
 		{
-			if (s.isFavorited())
-			{
-				setColor(Color.yellow);
-			} else
-			{
-				setColor(Color.white);
-			}
-			// setColor(Color.white);
+			setColor(new Color(192, 255, 255));
+		}
+		if (s.isFavorited())
+		{
+			setColor(new Color(255,204,51));
+		}
+		if (isSelected)
+		{
+			setColor(new Color(0,128,255));
 		}
 
 		for (Component c : this.getComponents())
