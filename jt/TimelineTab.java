@@ -61,6 +61,7 @@ public abstract class TimelineTab extends ListTab
 						break;
 					case 'k':
 						list.changeSelection(list.getSelectedRow() - 1, 0, false, false);
+						break;
 					case 't':
 						t.updateStatus(new StatusUpdate(JOptionPane.showInputDialog("v('ω')")));
 						break;
