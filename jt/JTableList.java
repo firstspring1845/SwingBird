@@ -53,6 +53,10 @@ public class JTableList extends JTable
 	{
 		model.insertRow(0, new Object[]{o});
 		this.setRowHeight(0, prepareRenderer(this.getCellRenderer(0, 0), 0, 0).getHeight());
+		if (getSelectedRow() == 0)
+		{
+			changeSelection(1, 0, false, false);
+		}
 	}
 
 	public void addLast(Object o)
