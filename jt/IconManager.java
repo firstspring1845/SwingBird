@@ -3,24 +3,31 @@ package jt;
 import javax.swing.*;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
-public class IconManager
+public class IconManager implements Runnable
 {
-	private static Thread getterThread;
+	static
+	{
+		new Thread(new IconManager()).start();
+	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static Map<String, ImageIcon> cache = Collections.synchronizedMap(new HashMap());
-	public static ImageIcon loadingImage = new ImageIcon("defaulticon.png");
+	private static BlockingQueue<URL> q = new LinkedBlockingQueue<>();
+	public static final ImageIcon loadingImage = new ImageIcon("defaulticon.png");
 
 	public static ImageIcon getImage(String url)
 	{
-		Scanner s = new Scanner(url);
-		s.useDelimiter(Pattern.compile(".*/"));
-		String fileName = s.next();
+		String fileName = url.replaceAll(".*/", "");
 		if (cache.containsKey(fileName))
 		{
 			return cache.get(fileName);
@@ -32,79 +39,59 @@ public class IconManager
 			cache.put(fileName, i);
 			return i;
 		}
-		getter.addURL(url);
+		try
+		{
+			q.add(new URL(url));
+		} catch (MalformedURLException e)
+		{
+
+		}
 		return loadingImage;
 	}
 
-	static class getter implements Runnable
+	@Override
+	public void run()
 	{
-		static Queue<URL> q = new ConcurrentLinkedQueue<>();
-
-		static void addURL(String str)
+		while (true)
 		{
 			try
 			{
-				URL u = new URL(str);
-				if (!q.contains(u))
+				URL u = q.take();
+				Scanner s = new Scanner(u.toString());
+				s.useDelimiter(Pattern.compile(".*/"));
+				String fileName = s.next();
+				HttpURLConnection c = (HttpURLConnection) u.openConnection();
+				c.setRequestMethod("GET");
+				c.connect();
+				System.out.println("GET");
+				InputStream is = new BufferedInputStream(c.getInputStream());
+				byte[] arr = new byte[c.getContentLength()];
+				int i = 0;
+				while (i < arr.length)
 				{
-					q.add(u);
+					int av = is.available();
+					if (av == 0)
+					{
+						continue;
+					} else
+					{
+						is.read(arr, i, av);
+						i += av;
+					}
 				}
+				System.out.println(arr.length);
+				new File("cache").mkdir();
+				OutputStream os = new FileOutputStream("cache/" + fileName);
+				os.write(arr);
+				os.close();
+				Main.refresh();
 			} catch (Exception e)
 			{
+				System.out.println("ほげ～");
 				e.printStackTrace();
-			}
-			if (getterThread == null || !getterThread.isAlive())
-			{
-				getterThread = new Thread(new getter());
-				getterThread.start();
-			}
-		}
-
-		@Override
-		public void run()
-		{
-			while (!q.isEmpty())
-			{
-				try
-				{
-					URL u = q.peek();
-					Scanner s = new Scanner(u.toString());
-					s.useDelimiter(Pattern.compile(".*/"));
-					String fileName = s.next();
-					HttpURLConnection c = (HttpURLConnection) u.openConnection();
-					c.setRequestMethod("GET");
-					c.connect();
-					System.out.println("GET");
-					InputStream is = new BufferedInputStream(c.getInputStream());
-					byte[] arr = new byte[c.getContentLength()];
-					int i = 0;
-					while (i < arr.length)
-					{
-						int av = is.available();
-						if (av == 0)
-						{
-							continue;
-						} else
-						{
-							is.read(arr, i, av);
-							i += av;
-						}
-					}
-					System.out.println(arr.length);
-					new File("cache").mkdir();
-					OutputStream os = new FileOutputStream("cache/" + fileName);
-					os.write(arr);
-					os.close();
-					q.poll();
-					Main.refresh();
-				} catch (Exception e)
-				{
-					q.poll();
-					System.out.println("���������������ł�");
-					e.printStackTrace();
-				}
 			}
 		}
 	}
-
 }
+
+
