@@ -57,7 +57,7 @@ public class ActivityRender extends JPanel implements TableCellRenderer
 			c.setFont(new Font("Meiryo", Font.PLAIN, 12));
 		}
 
-		icon.setIcon(IconManager.getImage(e.getUser().getProfileImageURL()));
+		icon.setIcon(IconCache.getImage(e.getUser().getProfileImageURL()));
 
 		event.setText(e.getUser().getScreenName() + "に" + e.type.message);
 		event.setLocation(48 + 10, 0);

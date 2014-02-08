@@ -13,11 +13,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
-public class IconManager implements Runnable
+public class IconCache implements Runnable
 {
 	static
 	{
-		new Thread(new IconManager()).start();
+		new Thread(new IconCache()).start();
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})

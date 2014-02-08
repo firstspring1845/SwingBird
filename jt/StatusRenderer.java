@@ -64,7 +64,7 @@ public class StatusRenderer extends JPanel implements TableCellRenderer
 			c.setFont(new Font("Meiryo", Font.PLAIN, 12));
 		}
 
-		icon.setIcon(IconManager.getImage(s.getIconURL()));
+		icon.setIcon(IconCache.getImage(s.getIconURL()));
 
 		name.setText(s.getName());
 		name.setLocation(48 + 10, 0);
