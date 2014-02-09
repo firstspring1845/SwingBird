@@ -6,6 +6,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JTableList extends JTable
 {
@@ -22,12 +24,17 @@ public class JTableList extends JTable
 		this.setDefaultEditor(Object.class, null);
 		this.setModel(model);
 		InputMap im = getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		im.getParent().remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
-		im.getParent().remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK));
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0), "selectFirstRow");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_END, 0), "selectLastRow");
 		im.put(KeyStroke.getKeyStroke('j'), "selectNextRow");
 		im.put(KeyStroke.getKeyStroke('k'), "selectPreviousRow");
+		Set<AWTKeyStroke> keyset;
+		keyset = new HashSet(getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+		keyset.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
+		setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keyset);
+		keyset = new HashSet(getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
+		keyset.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK));
+		setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, keyset);
 	}
 
 	public boolean dirty = true;
