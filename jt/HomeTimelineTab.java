@@ -72,13 +72,13 @@ public class HomeTimelineTab extends TimelineTab
 	}
 
 	@Override
-	public void onTweet(final Long id)
+	public void onStatus(final Status status)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
-				list.addTop(id);
+				list.addTop(status.getId());
 			}
 		});
 	}

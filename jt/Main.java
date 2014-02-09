@@ -50,10 +50,10 @@ public class Main implements ActionListener
 				TweetDatabase.createStatusModel(s);
 				for (Component c : tp.getComponents())
 				{
-					if (c instanceof TimelineTab)
+					if (c instanceof TweetListener)
 					{
-						TimelineTab t = (TimelineTab) c;
-						t.onTweet(Long.valueOf(s.getId()));
+						TweetListener l = (TweetListener) c;
+						l.onStatus(s);
 					}
 				}
 			}
@@ -66,10 +66,10 @@ public class Main implements ActionListener
 				Main.refresh();
 				for (Component c : Main.tp.getComponents())
 				{
-					if (c instanceof HistoryTab)
+					if (c instanceof ActivityListener)
 					{
-						HistoryTab t = (HistoryTab) c;
-						t.onFavorite(u, uu, s);
+						ActivityListener l = (ActivityListener) c;
+						l.onFavorite(u, uu, s);
 					}
 				}
 			}
@@ -82,10 +82,10 @@ public class Main implements ActionListener
 				Main.refresh();
 				for (Component c : Main.tp.getComponents())
 				{
-					if (c instanceof HistoryTab)
+					if (c instanceof ActivityListener)
 					{
-						HistoryTab t = (HistoryTab) c;
-						t.onUnfavorite(u, uu, s);
+						ActivityListener l = (ActivityListener) c;
+						l.onUnfavorite(u, uu, s);
 					}
 				}
 			}
@@ -97,10 +97,10 @@ public class Main implements ActionListener
 				TweetDatabase.putUser(uu);
 				for (Component c : Main.tp.getComponents())
 				{
-					if (c instanceof HistoryTab)
+					if (c instanceof ActivityListener)
 					{
-						HistoryTab t = (HistoryTab) c;
-						t.onFollow(u, uu);
+						ActivityListener l = (ActivityListener) c;
+						l.onFollow(u, uu);
 					}
 				}
 			}

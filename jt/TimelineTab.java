@@ -1,6 +1,7 @@
 package jt;
 
 import twitter4j.AsyncTwitter;
+import twitter4j.Status;
 import twitter4j.StatusUpdate;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Collections;
 
-public abstract class TimelineTab extends ListTab
+public abstract class TimelineTab extends ListTab implements TweetListener
 {
 
 	public boolean refresh;
@@ -144,7 +145,8 @@ public abstract class TimelineTab extends ListTab
 		fetchMore = false;
 	}
 
-	public void onTweet(Long id)
+	@Override
+	public void onStatus(Status status)
 	{
 	}
 

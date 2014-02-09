@@ -2,6 +2,7 @@ package jt;
 
 public enum EventType
 {
+	RT("RT", "リツイートされました"),
 	FAV("FAV", "ふぁぼられました"),
 	UNFAV("UNFAV", "あんふぁぼされました"),
 	FOLLOW("FOLLOW", "フォローされました");
