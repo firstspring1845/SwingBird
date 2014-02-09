@@ -22,8 +22,8 @@ public class JTableList extends JTable
 		this.setDefaultEditor(Object.class, null);
 		this.setModel(model);
 		InputMap im = getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "NOTHING");
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK), "NOTHING");
+		im.getParent().remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
+		im.getParent().remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK));
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0), "selectFirstRow");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_END, 0), "selectLastRow");
 		im.put(KeyStroke.getKeyStroke('j'), "selectNextRow");
