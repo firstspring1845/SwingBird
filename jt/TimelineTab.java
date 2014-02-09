@@ -57,24 +57,12 @@ public abstract class TimelineTab extends ListTab implements TweetListener
 					case 'c':
 						clear();
 						break;
-					case 'j':
-						list.changeSelection(list.getSelectedRow() + 1, 0, false, false);
-						break;
-					case 'k':
-						list.changeSelection(list.getSelectedRow() - 1, 0, false, false);
-						break;
 					case 't':
 						t.updateStatus(new StatusUpdate(JOptionPane.showInputDialog("v('ω')")));
 						break;
 				}
 				switch (e.getKeyCode())
 				{
-					case KeyEvent.VK_HOME:
-						list.changeSelection(0, 0, false, false);
-						break;
-					case KeyEvent.VK_END:
-						list.changeSelection(list.getRowCount() - 1, 0, false, false);
-						break;
 					case KeyEvent.VK_F5:
 						if (!refresh)
 						{

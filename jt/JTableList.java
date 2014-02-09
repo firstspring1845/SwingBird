@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class JTableList extends JTable
 {
@@ -19,6 +21,32 @@ public class JTableList extends JTable
 		this.setIntercellSpacing(new Dimension(0, 1));
 		this.setDefaultEditor(Object.class, null);
 		this.setModel(model);
+		this.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				JTableList list = (JTableList)e.getComponent();
+				switch (e.getKeyChar())
+				{
+					case 'j':
+						list.changeSelection(list.getSelectedRow() + 1, 0, false, false);
+						break;
+					case 'k':
+						list.changeSelection(list.getSelectedRow() - 1, 0, false, false);
+						break;
+				}
+				switch (e.getKeyCode())
+				{
+					case KeyEvent.VK_HOME:
+						list.changeSelection(0, 0, false, false);
+						break;
+					case KeyEvent.VK_END:
+						list.changeSelection(list.getRowCount() - 1, 0, false, false);
+						break;
+				}
+			}
+		});
 	}
 
 	public boolean dirty = true;

@@ -3,41 +3,12 @@ package jt;
 import twitter4j.Status;
 import twitter4j.User;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 public class HistoryTab extends ListTab implements TweetListener, ActivityListener
 {
 	public HistoryTab()
 	{
 		super();
 		list.setDefaultRenderer(Object.class, ActivityRender.INSTANCE);
-		list.addKeyListener(new KeyAdapter()
-		{
-
-			@Override
-			public void keyPressed(KeyEvent e)
-			{
-				switch (e.getKeyChar())
-				{
-					case 'j':
-						list.changeSelection(list.getSelectedRow() + 1, 0, false, false);
-						break;
-					case 'k':
-						list.changeSelection(list.getSelectedRow() - 1, 0, false, false);
-						break;
-				}
-				switch (e.getKeyCode())
-				{
-					case KeyEvent.VK_HOME:
-						list.changeSelection(0, 0, false, false);
-						break;
-					case KeyEvent.VK_END:
-						list.changeSelection(list.getRowCount() - 1, 0, false, false);
-						break;
-				}
-			}
-		});
 	}
 
 	@Override
