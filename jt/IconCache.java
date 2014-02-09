@@ -8,10 +8,8 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.regex.Pattern;
 
 public class IconCache implements Runnable
 {
@@ -57,9 +55,11 @@ public class IconCache implements Runnable
 			try
 			{
 				URL u = q.take();
-				Scanner s = new Scanner(u.toString());
-				s.useDelimiter(Pattern.compile(".*/"));
-				String fileName = s.next();
+				String fileName = u.toString().replaceAll(".*/","");
+				if(new File("cache/" + fileName).exists())
+				{
+					continue;
+				}
 				HttpURLConnection c = (HttpURLConnection) u.openConnection();
 				c.setRequestMethod("GET");
 				c.connect();
