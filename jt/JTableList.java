@@ -30,7 +30,10 @@ public class JTableList extends JTable
 				switch (e.getKeyChar())
 				{
 					case 'j':
-						list.changeSelection(list.getSelectedRow() + 1, 0, false, false);
+						if(list.getSelectedRow() != list.getRowCount()-1)
+						{
+							list.changeSelection(list.getSelectedRow() + 1, 0, false, false);
+						}
 						break;
 					case 'k':
 						list.changeSelection(list.getSelectedRow() - 1, 0, false, false);
