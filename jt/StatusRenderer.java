@@ -48,15 +48,15 @@ public class StatusRenderer extends JPanel implements TableCellRenderer
 			setColor(Color.white);
 		} else
 		{
-			setColor(new Color(192, 255, 255));
+			setColor(new Color(224, 224, 224));
 		}
 		if (s.isFavorited())
 		{
-			setColor(new Color(255,204,51));
+			setColor(new Color(255, 204, 51));
 		}
 		if (isSelected)
 		{
-			setColor(new Color(0,128,255));
+			setColor(new Color(128, 255, 128));
 		}
 
 		for (Component c : this.getComponents())

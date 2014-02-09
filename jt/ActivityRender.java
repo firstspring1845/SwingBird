@@ -49,11 +49,11 @@ public class ActivityRender extends JPanel implements TableCellRenderer
 			setColor(Color.white);
 		} else
 		{
-			setColor(new Color(192, 255, 255));
+			setColor(new Color(224, 224, 224));
 		}
 		if (isSelected)
 		{
-			setColor(new Color(0,128,255));
+			setColor(new Color(128, 255, 128));
 		}
 
 		for (Component c : this.getComponents())
