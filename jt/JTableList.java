@@ -73,6 +73,11 @@ public class JTableList extends JTable
 		{
 			changeSelection(1, 0, false, false);
 		}
+		JScrollPane p = getParent() == null ? null : getParent().getParent() instanceof JScrollPane ? (JScrollPane)getParent().getParent() : null;
+		if(p != null)
+		{
+			p.getVerticalScrollBar().setValue(p.getVerticalScrollBar().getValue() + getRowHeight(0));
+		}
 	}
 
 	public void addLast(Object o)
