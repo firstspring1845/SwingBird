@@ -41,6 +41,14 @@ public class Main implements ActionListener
 		tp.add(new ListsTab(), "List");
 		tp.add(new HistoryTab(), "History");
 		f.setVisible(true);
+		IconCache.addCallback(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				refresh();
+			}
+		});
 		TwitterStream ts = AccountManager.getInstance().getTwitterStream();
 		ts.addListener(new UserStreamAdapter()
 		{

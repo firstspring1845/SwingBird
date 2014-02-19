@@ -5,9 +5,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -22,6 +20,12 @@ public class IconCache implements Runnable
 	private static Map<String, ImageIcon> cache = Collections.synchronizedMap(new HashMap());
 	private static BlockingQueue<URL> q = new LinkedBlockingQueue<>();
 	public static final ImageIcon loadingImage = new ImageIcon("defaulticon.png");
+	private static List<Runnable> callbacks = new LinkedList<>();
+
+	public static void addCallback(Runnable r)
+	{
+		callbacks.add(r);
+	}
 
 	public static ImageIcon getImage(String url)
 	{
@@ -84,7 +88,10 @@ public class IconCache implements Runnable
 				OutputStream os = new FileOutputStream("cache/" + fileName);
 				os.write(arr);
 				os.close();
-				Main.refresh();
+				for(Runnable r : callbacks)
+				{
+					r.run();
+				}
 			} catch (Exception e)
 			{
 				System.out.println("ほげ～");
