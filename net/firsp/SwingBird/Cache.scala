@@ -1,0 +1,30 @@
+package net.firsp.SwingBird
+
+import scala.collection.mutable.HashMap
+import twitter4j.{Status, User}
+
+object Cache {
+	val s = new HashMap[Long, StatusModel]
+	val u = new HashMap[Long, User]
+
+	def createModel(status: Status): StatusModel = {
+		s.getOrElseUpdate(status.getId, {
+			val id = status.getId
+			val user = status.getUser.getId
+			u.put(user, status.getUser)
+			val rt = status.isRetweet
+			if (rt) createModel(status.getRetweetedStatus)
+			val org = if (rt) status.getRetweetedStatus else status
+			var text = org.getText
+			text = org.getURLEntities.foldLeft(text)((t, e) => t.replace(e.getURL, e.getExpandedURL))
+			text = org.getMediaEntities.foldLeft(text)((t, e) => t.replace(e.getURL, e.getExpandedURL))
+			val date = status.getCreatedAt
+			val via = (if (rt) ("(RT:" + org.getUser.getScreenName + ")") else "") + org.getCreatedAt.toString + " via " + org.getSource.replaceAll("<.+?>", "")
+			new StatusModel(id, user, text, date, via, rt, org.getId)
+		})
+	}
+
+	def getUser(id: Long) = u.get(id)
+
+}
+
