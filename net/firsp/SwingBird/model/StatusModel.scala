@@ -1,4 +1,4 @@
-package net.firsp.SwingBird
+package net.firsp.SwingBird.model
 
 import java.util.Date
 

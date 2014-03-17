@@ -1,7 +1,8 @@
-package net.firsp.SwingBird
+package net.firsp.SwingBird.cache
 
 import scala.collection.mutable.HashMap
 import twitter4j.{Status, User}
+import net.firsp.SwingBird.model.StatusModel
 
 object Cache {
 	val s = new HashMap[Long, StatusModel]
