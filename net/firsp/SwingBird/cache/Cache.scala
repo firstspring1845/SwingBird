@@ -20,12 +20,14 @@ object Cache {
 			text = org.getURLEntities.foldLeft(text)((t, e) => t.replace(e.getURL, e.getExpandedURL))
 			text = org.getMediaEntities.foldLeft(text)((t, e) => t.replace(e.getURL, e.getExpandedURL))
 			val date = status.getCreatedAt
-			val via = (if (rt) ("(RT:" + org.getUser.getScreenName + ")") else "") + org.getCreatedAt.toString + " via " + org.getSource.replaceAll("<.+?>", "")
+			val via = (if (rt) ("(RT:" + status.getUser.getScreenName + ")") else "") + org.getCreatedAt.toString + " via " + org.getSource.replaceAll("<.+?>", "")
 			new StatusModel(id, user, text, date, via, rt, org.getId)
 		})
 	}
 
-	def getUser(id: Long) = u.get(id)
+	def getUser(m: StatusModel) = u.get(m.user).get
+
+	def getOriginalUser(m: StatusModel) = getUser(s.get(m.orgId).get)
 
 }
 
