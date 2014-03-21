@@ -81,11 +81,13 @@ class TimelineView extends TableList {
 
 	addKeyListener(new KeyAdapter() {
 		override def keyTyped(e: KeyEvent) = {
-			val s = getValueAt(getSelectedRow, 0).asInstanceOf[StatusModel]
-			e.getKeyChar match {
-				case 'f' => //spawn(getTwitter.createFavorite(s.orgId))
-				case 'u' => //spawn(getTwitter.destroyFavorite(s.orgId))
-				case 'r' => //spawn(getTwitter.retweetStatus(s.orgId))
+			getValueAt(getSelectedRow, 0) match {
+				case s: StatusModel => e.getKeyChar match {
+					case 'f' => //spawn(getTwitter.createFavorite(s.orgId))
+					case 'u' => //spawn(getTwitter.destroyFavorite(s.orgId))
+					case 'r' => //spawn(getTwitter.retweetStatus(s.orgId))
+					case _ =>
+				}
 				case _ =>
 			}
 		}
