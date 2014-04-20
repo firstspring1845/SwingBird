@@ -83,14 +83,15 @@ class TimelineView extends TableList {
 		override def keyTyped(e: KeyEvent) = {
 			getValueAt(getSelectedRow, 0) match {
 				case s: StatusModel => e.getKeyChar match {
-					case 'f' => //spawn(getTwitter.createFavorite(s.orgId))
-					case 'u' => //spawn(getTwitter.destroyFavorite(s.orgId))
-					case 'r' => //spawn(getTwitter.retweetStatus(s.orgId))
+					case 'f' => spawn(getTwitter.createFavorite(s.orgId))
+					case 'u' => spawn(getTwitter.destroyFavorite(s.orgId))
+					case 'r' => spawn(getTwitter.retweetStatus(s.orgId))
 					case _ =>
 				}
 				case _ =>
 			}
 		}
+		def getTwitter = twitter4j.TwitterFactory.getSingleton
 	})
 
 	override def tableChanged(e: TableModelEvent) = {
@@ -123,20 +124,29 @@ class StatusListModel extends AbstractTableModel {
 
 	def insert(m: StatusModel): Unit = map.synchronized {
 		if (!map.contains(m.id)) {
-			arr.indexWhere(_.date.getTime <= m.date.getTime) match {
-				case -1 => {
-					val row = arr.size
-					invokeAndWait {
-						arr += m
-						fireTableRowsInserted(row, row)
-					}
+			var index = -1
+			if(arr.size > 1) {
+				var minIndex = 0
+				var maxIndex = arr.size - 1
+				while(index == -1 && minIndex != maxIndex - 1) {
+					val mid = (minIndex + maxIndex) / 2
+					if(m.date.getTime == arr(mid).date.getTime) index = mid
+					else if(m.date.getTime > arr(mid).date.getTime) maxIndex = mid
+					else minIndex = mid
 				}
-				case row: Int => {
-					invokeAndWait {
-						arr.insert(row, m)
-						fireTableRowsInserted(row, row)
-					}
+				if(index == -1) {
+					if(m.date.getTime > arr(minIndex).date.getTime) index = minIndex
+					else if(m.date.getTime < arr(maxIndex).date.getTime) index = maxIndex + 1
+					else index = maxIndex
 				}
+			}
+			else if(arr.size == 1) {
+				if(m.date.getTime > arr(0).date.getTime) index = 0 else index = 1
+			}
+			else index = 0
+			invokeAndWait {
+				arr.insert(index, m)
+				fireTableRowsInserted(index, index)
 			}
 			map += m.id
 		}
