@@ -3,15 +3,16 @@ package net.firsp.SwingBird.view
 import javax.swing._
 import javax.swing.table.AbstractTableModel
 import java.awt.{Container, Component, Dimension}
+import java.awt.event.{KeyAdapter, ActionEvent, KeyEvent}
 import javax.swing.event.TableModelEvent
 import scala.collection.mutable.{ArrayBuffer, HashSet}
+import scala.collection.JavaConversions._
 
-import twitter4j.Status
+import twitter4j.{Paging, Status}
 
 import net.firsp.SwingBird.lib.UsefulFunc._
 import net.firsp.SwingBird.model.StatusModel
 import net.firsp.SwingBird.cache.Cache
-import java.awt.event.{KeyAdapter, ActionEvent, KeyEvent}
 
 class TableList extends JTable {
 	setTableHeader(null)
@@ -86,11 +87,29 @@ class TimelineView extends TableList {
 					case 'f' => spawn(getTwitter.createFavorite(s.orgId))
 					case 'u' => spawn(getTwitter.destroyFavorite(s.orgId))
 					case 'r' => spawn(getTwitter.retweetStatus(s.orgId))
+					case 't' => {
+						val sn = Cache.getOriginalUser(s).getScreenName
+						val f = new JFrame
+						f.setTitle(sn)
+						f.setSize(480, 640)
+						val p = new JScrollPane(22, 31)
+						val t = new TimelineView
+						val r = new net.firsp.SwingBird.view.StatusRenderer(t)
+						t.model.addTableModelListener(r)
+						t.setDefaultRenderer(classOf[Object], r)
+						spawn {
+							getTwitter.getUserTimeline(sn, new Paging(1,200)).foreach(t.model.insert)
+						}
+						p.setViewportView(t)
+						f.add(p)
+						f.setVisible(true)
+					}
 					case _ =>
 				}
 				case _ =>
 			}
 		}
+
 		def getTwitter = twitter4j.TwitterFactory.getSingleton
 	})
 
@@ -125,23 +144,23 @@ class StatusListModel extends AbstractTableModel {
 	def insert(m: StatusModel): Unit = map.synchronized {
 		if (!map.contains(m.id)) {
 			var index = -1
-			if(arr.size > 1) {
+			if (arr.size > 1) {
 				var minIndex = 0
 				var maxIndex = arr.size - 1
-				while(index == -1 && minIndex != maxIndex - 1) {
+				while (index == -1 && minIndex != maxIndex - 1) {
 					val mid = (minIndex + maxIndex) / 2
-					if(m.date.getTime == arr(mid).date.getTime) index = mid
-					else if(m.date.getTime > arr(mid).date.getTime) maxIndex = mid
+					if (m.date.getTime == arr(mid).date.getTime) index = mid
+					else if (m.date.getTime > arr(mid).date.getTime) maxIndex = mid
 					else minIndex = mid
 				}
-				if(index == -1) {
-					if(m.date.getTime > arr(minIndex).date.getTime) index = minIndex
-					else if(m.date.getTime < arr(maxIndex).date.getTime) index = maxIndex + 1
+				if (index == -1) {
+					if (m.date.getTime > arr(minIndex).date.getTime) index = minIndex
+					else if (m.date.getTime < arr(maxIndex).date.getTime) index = maxIndex + 1
 					else index = maxIndex
 				}
 			}
-			else if(arr.size == 1) {
-				if(m.date.getTime > arr(0).date.getTime) index = 0 else index = 1
+			else if (arr.size == 1) {
+				if (m.date.getTime > arr(0).date.getTime) index = 0 else index = 1
 			}
 			else index = 0
 			invokeAndWait {
