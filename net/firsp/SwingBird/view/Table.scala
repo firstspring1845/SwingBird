@@ -97,7 +97,7 @@ class TimelineView extends TableList {
 	override def tableChanged(e: TableModelEvent) = {
 		super.tableChanged(e)
 		tryIgnore(this.prepareRenderer(getDefaultRenderer(classOf[Object]), e.getFirstRow, 0))
-		if (getSelectedRow == 0) {
+		if (getSelectedRow == 0 && e.getFirstRow == 0) {
 			changeSelection(1, 0, false, false)
 		}
 		val v = getScrollPane.getVerticalScrollBar
