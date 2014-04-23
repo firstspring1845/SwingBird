@@ -16,7 +16,7 @@ import net.firsp.SwingBird.cache.Cache
 
 class TableList extends JTable {
 	setTableHeader(null)
-	setIntercellSpacing(new Dimension(0, 1))
+	setIntercellSpacing(new Dimension(0, 0))
 	setDefaultEditor(classOf[Object], null)
 
 	{
