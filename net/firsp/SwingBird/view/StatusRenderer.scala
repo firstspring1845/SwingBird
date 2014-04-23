@@ -31,6 +31,9 @@ class StatusRenderer(table: JTable) extends StripedRendererBase(table) {
 			//fav
 			setColor(new Color(255, 204, 51))
 		}
+		if (m.rt) {
+			setColor(new Color(135, 206, 235)) //skyblue
+		}
 		if (isSelected) {
 			setColor(new Color(128, 255, 128))
 		}
